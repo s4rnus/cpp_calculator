@@ -13,9 +13,14 @@ const char plus = { '+' };
 const char minus = { '-' };
 
 
-std::vector<int> order_of_execution;
+static int fwparenth_counter = 0;
+static int bcparenth_counter = 0;
+
+
 std::vector<std::pair<char, int>> priority_operators;
-std::vector<std::pair<char, int>> all_operators;
+std::vector<std::pair<char, int>> regular_operators;
+std::vector<std::pair<char, int>> numbers;
+std::vector<int> order_of_execution;
 std::string expression;
 static double result;
 
@@ -39,14 +44,10 @@ bool priority_check(std::string expression) {
 }
 
 
-void operator_search(std::vector<char>& expression_disected, std::vector<std::pair<char, int>>& priority_operators, std::vector<std::pair<char, int>> all_operators) {
-
-	int fwparenth_counter = 0;
-	int bcparenth_counter = 0;
+void priority_operator_search(std::vector<char>& expression_disected, std::vector<std::pair<char, int>>& priority_operators) {
 
 	for (int i = 0; i < expression_disected.size(); i++) {
 		if (expression_disected[i] == char{ '(' } || expression_disected[i] == char{ ')' } || expression_disected[i] == multiplication || expression_disected[i] == division) {
-			priority_operators.push_back({ expression_disected[i], i });
 
 			const char x = expression_disected[i];
 
@@ -58,43 +59,31 @@ void operator_search(std::vector<char>& expression_disected, std::vector<std::pa
 				bcparenth_counter++;
 				break;
 			}
-		}
-	}
 
-	for (int i = 0; i < expression_disected.size(); i++) {
-		if (expression_disected[i] == plus || expression_disected[i] == minus || expression_disected[i] == multiplication || expression_disected[i] == division) {
-			all_operators.push_back({ expression_disected[i], i });
+			priority_operators.push_back({ expression_disected[i], i });
+			expression_disected.erase(expression_disected.begin() + i);
 		}
 	}
 }
 
 
-void arrange_priority(std::vector<char>& expression_disected, std::vector<std::pair<char, int>>& priority_operators, std::vector<std::pair<char, int>> all_operators) {
-	
+void regular_operator_search(std::vector<char>& expression_disected, std::vector<std::pair<char, int>> regular_operators) {
 
 	for (int i = 0; i < expression_disected.size(); i++) {
+		if (expression_disected[i] == plus || expression_disected[i] == minus) {
 
-		const char op = priority_operators[i].first;
-
-		switch (op) {
-			case '*' || '/':
-				
-				
+			regular_operators.push_back({ expression_disected[i], i });
+			expression_disected.erase(expression_disected.begin() + i);
 		}
 	}
-
 }
 
 
+void order_determination(std::vector<char>& expression_disected, std::vector<std::pair<char, int>>& priority_operators, std::vector<std::pair<char, int>> all_operators) {}
 
 
 int main()
 {
-
-
-	if (priority_check(expression)) {
-		arrange_priority(expression_disected, priority_operators);
-	}
 
 	std::cout << '\n' << "Enter an expression: ";
 	std::getline(std::cin, expression);
@@ -102,15 +91,6 @@ int main()
 
 	if (expression.empty()) {
 		expression = getexpression(expression);
-	}
-
-
-	for (char charachter : expression) {
-		expression_disected.push_back(charachter);
-	}
-
-	if (priority_check(expression) == true) {
-		arrange_priority(expression_disected, priority_operators);
 	}
 
 	return 0;
