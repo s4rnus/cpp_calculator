@@ -5,53 +5,67 @@
 #include <algorithm>
 
 
-const char spacebar = { ' ' };
-const char parenth = { '(' };
-const char multiplication = { '*' };
-const char division = { '/' };
-const char plus = { '+' };
-const char minus = { '-' };
+using String = std::string;
+
+template<typename T>
+using Vector = std::vector<T>;
+
+template<typename T, typename N>
+using PairedVector = std::vector<std::pair<T, N>>;
 
 
-static int fwparenth_counter = 0;
-static int bcparenth_counter = 0;
+constexpr char spacebar = ' ';
+constexpr char parenth = '(';
+constexpr char multiplication = '*';
+constexpr char division = '/';
+constexpr char plus = '+';
+constexpr char minus = '-';
 
 
-std::vector<std::pair<char, int>> priority_operators;
-std::vector<std::pair<char, int>> regular_operators;
-std::vector<std::pair<char, int>> numbers;
-std::vector<int> order_of_execution;
-std::string expression;
-static double result;
+int fwparenth_counter = 0;
+int bcparenth_counter = 0;
+double result;
 
 
-std::string getexpression(std::string expression) {
+PairedVector<char, int> priority_operators;
+PairedVector<char, int> regular_operators;
+PairedVector<char, int> numbers;
+Vector<int> order_of_execution;
+Vector<char> expression_disected;
+
+String expression;
+
+
+String getexpression(String expression) {
 
 	while (expression.empty()) {
 		std::cout << '\n' << "Enter an expression: ";
 		std::getline(std::cin, expression);
 	}
 	return expression;
-
 }
 
 
-std::vector<char> expression_disected(expression.begin(), expression.end());
-
-
-bool priority_check(std::string expression) {
-	return expression.find(parenth) != std::string::npos || expression.find(multiplication) != std::string::npos || expression.find(division) != std::string::npos;
+Vector<char> disect_expression(const String& expression) {
+	Vector<char> expressions_disected(expression.begin(), expression.end());
+	return expression_disected;
 }
 
 
-void priority_operator_search(std::vector<char>& expression_disected, std::vector<std::pair<char, int>>& priority_operators) {
+bool priority_check(String expression) {
+	return expression.find(parenth) != String::npos || expression.find(multiplication) != String::npos || expression.find(division) != String::npos;
+}
+
+
+void priority_operator_search(Vector<char>& expression_disected, PairedVector<char, int>& priority_operators) {
 
 	for (int i = 0; i < expression_disected.size(); i++) {
-		if (expression_disected[i] == char{ '(' } || expression_disected[i] == char{ ')' } || expression_disected[i] == multiplication || expression_disected[i] == division) {
+		char op = expression_disected[i];
+		if (op == char{ '(' } || op == char{ ')' } || op == multiplication || op == division) {
 
-			const char x = expression_disected[i];
+			priority_operators.push_back({ op, i });
 
-			switch (x) {
+			switch (op) {
 			case '(':
 				fwparenth_counter++;
 				break;
@@ -59,27 +73,32 @@ void priority_operator_search(std::vector<char>& expression_disected, std::vecto
 				bcparenth_counter++;
 				break;
 			}
-
-			priority_operators.push_back({ expression_disected[i], i });
-			expression_disected.erase(expression_disected.begin() + i);
 		}
 	}
 }
 
 
-void regular_operator_search(std::vector<char>& expression_disected, std::vector<std::pair<char, int>> regular_operators) {
+void regular_operator_search(Vector<char>& expression_disected, PairedVector<char, int>& regular_operators) {
 
 	for (int i = 0; i < expression_disected.size(); i++) {
-		if (expression_disected[i] == plus || expression_disected[i] == minus) {
+		char op = expression_disected[i];
+		if (op == plus || op == minus) {
 
-			regular_operators.push_back({ expression_disected[i], i });
-			expression_disected.erase(expression_disected.begin() + i);
+			regular_operators.push_back({ op, i });
 		}
 	}
 }
 
 
-void order_determination(std::vector<char>& expression_disected, std::vector<std::pair<char, int>>& priority_operators, std::vector<std::pair<char, int>> all_operators) {}
+void order_determination(String expression, PairedVector<char, int>& priority_operators, PairedVector<char, int>& regular_operators, Vector<char>& expression_disected) {
+
+	for (int i = 0; i < expression.size(); i++) {
+
+
+
+	}
+
+}
 
 
 int main()
