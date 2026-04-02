@@ -209,3 +209,4 @@ __marimo__/
 *.vcxproj
 *.vcxproj.filters
 *.vcxproj.users
+*.vcxproj.user
