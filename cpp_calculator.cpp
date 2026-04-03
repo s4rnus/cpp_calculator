@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <unordered_map>
 
 
 using String = std::string;
@@ -12,6 +13,9 @@ using Vector = std::vector<T>;
 
 template<typename T, typename N>
 using PairedVector = std::vector<std::pair<T, N>>;
+
+template<typename T, typename N>
+using Map = std::unordered_map<T, N>
 
 
 constexpr char spacebar = ' ';
@@ -29,12 +33,14 @@ double result;
 
 PairedVector<char, int> priority_operators;
 PairedVector<char, int> regular_operators;
-PairedVector<char, int> numbers;
-Vector<int> order_of_execution;
+PairedVector<char, int> order_of_execution;
 Vector<char> expression_disected;
 
 String expression;
 
+//тут функции-драйверы для математики
+//
+//тут функции-драйверы для математики
 
 String getexpression(String expression) {
 
@@ -92,9 +98,33 @@ void regular_operator_search(Vector<char>& expression_disected, PairedVector<cha
 
 void order_determination(String expression, PairedVector<char, int>& priority_operators, PairedVector<char, int>& regular_operators, Vector<char>& expression_disected) {
 
-	for (int i = 0; i < expression.size(); i++) {
+	if (priority_check(expression) == true) {
 
+		if (fwparenth_counter == 0) {
 
+			for (int i = 0; i < priority_operators.size(); i++) {
+
+				order_of_execution.push_back(priority_operators[i]);
+
+			}
+
+			for (int i = 0; i < regular_operators.size(); i++) {
+
+				order_of_execution.push_back(regular_operators[i]);
+
+			}
+
+		}
+		
+		else {
+
+			while (fwparenth_counter > 0) {
+
+				for ()
+
+			}
+
+		}
 
 	}
 
