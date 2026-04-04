@@ -15,7 +15,7 @@ template<typename T, typename N>
 using PairedVector = std::vector<std::pair<T, N>>;
 
 template<typename T, typename N>
-using Map = std::unordered_map<T, N>
+using Map = std::unordered_map<T, N>;
 
 
 constexpr char spacebar = ' ';
@@ -26,15 +26,16 @@ constexpr char plus = '+';
 constexpr char minus = '-';
 
 
-int fwparenth_counter = 0;
-int bcparenth_counter = 0;
+int parenth_counter = 0;
 double result;
 
 
-PairedVector<char, int> priority_operators;
+Map<char, int> priority_operators;
 PairedVector<char, int> regular_operators;
+PairedVector<char, int> parenthesises;
 PairedVector<char, int> order_of_execution;
 Vector<char> expression_disected;
+
 
 String expression;
 
@@ -63,22 +64,21 @@ bool priority_check(String expression) {
 }
 
 
-void priority_operator_search(Vector<char>& expression_disected, PairedVector<char, int>& priority_operators) {
+void priority_operator_search(Vector<char>& expression_disected, Map<char, int>& priority_operators, PairedVector<char, int> parenthesises) {
 
 	for (int i = 0; i < expression_disected.size(); i++) {
+
 		char op = expression_disected[i];
-		if (op == char{ '(' } || op == char{ ')' } || op == multiplication || op == division) {
 
-			priority_operators.push_back({ op, i });
+		if (op == char{ '(' } || op == char{ ')' }) {
 
-			switch (op) {
-			case '(':
-				fwparenth_counter++;
-				break;
-			case ')':
-				bcparenth_counter++;
-				break;
-			}
+			parenthesises.push_back({ op, i });
+
+			parenth_counter++;
+		}
+
+		else if (op == multiplication || op == division) {
+			priority_operators.emplace( op, i );
 		}
 	}
 }
@@ -96,15 +96,15 @@ void regular_operator_search(Vector<char>& expression_disected, PairedVector<cha
 }
 
 
-void order_determination(String expression, PairedVector<char, int>& priority_operators, PairedVector<char, int>& regular_operators, Vector<char>& expression_disected) {
+void order_determination(String expression, Map<char, int>& priority_operators, PairedVector<char, int>& regular_operators, Vector<char>& expression_disected, PairedVector<char, int>& parenthesises) {
 
 	if (priority_check(expression) == true) {
 
-		if (fwparenth_counter == 0) {
+		if (parenth_counter == 0) {
 
 			for (int i = 0; i < priority_operators.size(); i++) {
 
-				order_of_execution.push_back(priority_operators[i]);
+				order_of_execution.push_back({ priority_operators[i].first, priority_operators[i].second});
 
 			}
 
@@ -118,9 +118,26 @@ void order_determination(String expression, PairedVector<char, int>& priority_op
 		
 		else {
 
-			while (fwparenth_counter > 0) {
+			while (parenth_counter > 0) {
 
-				for ()
+				for (int i = 0, n = 1; i < parenth_counter; i++, n++) {
+
+					if (parenthesises[i].first == char{ '(' } and parenthesises[n].first == char{ '(' }) {
+						continue;
+					}
+					
+					else if (parenthesises[i].first == char{ '(' } and parenthesises[n].first == char{ ')' }) {
+
+						for (int x = parenthesises[i].second; x < parenthesises[n].second; x++) {
+
+
+
+						}
+
+					}
+
+
+				}
 
 			}
 
